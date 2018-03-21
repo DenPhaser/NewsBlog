@@ -1,0 +1,30 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using NewsBlog.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">
+                <span class="hidden-xs">@UserManager.GetUserName(User)</span>
+            </a>
+        </li>
+        <li>
+            <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
+                <button type="submit" class="btn btn-link navbar-btn navbar-link">Log off</button>
+            </form>
+        </li>
+    </ul>
+
+
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
+        <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
+    </ul>
+}
