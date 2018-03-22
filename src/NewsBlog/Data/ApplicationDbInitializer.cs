@@ -29,7 +29,7 @@ namespace NewsBlog.Data
         public async Task Initialize()
         {
             IdentityRole adminRole;
-            if (await this._roleManager.RoleExistsAsync("Administrator"))
+            if (!await this._roleManager.RoleExistsAsync("Administrator"))
             {
                 adminRole =
                     new IdentityRole()
@@ -40,7 +40,7 @@ namespace NewsBlog.Data
             }
             else
             {
-                adminRole = await this._roleManager.FindByNameAsync("Admin");
+                adminRole = await this._roleManager.FindByNameAsync("Administrator");
             }
 
             if (!this._context.Users.Any())
