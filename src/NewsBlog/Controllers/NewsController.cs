@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace NewsBlog.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     using NewsBlog.Models.NewsViewModels;
@@ -38,6 +39,7 @@ namespace NewsBlog.Controllers
 
         // GET: /News/Add
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Add()
         {
             throw new NotImplementedException();
@@ -46,6 +48,7 @@ namespace NewsBlog.Controllers
         // POST: /News/Add
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Add(NewsViewModel model)
         {
             throw new NotImplementedException();
@@ -53,6 +56,7 @@ namespace NewsBlog.Controllers
 
         // GET: /News/Edit
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Edit(long id)
         {
             throw new NotImplementedException();
@@ -61,6 +65,7 @@ namespace NewsBlog.Controllers
         // POST: /News/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Edit(NewsViewModel model)
         {
             throw new NotImplementedException();

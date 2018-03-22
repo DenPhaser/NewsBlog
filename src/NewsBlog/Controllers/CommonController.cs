@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 
 namespace NewsBlog.Controllers
 {
-    using Microsoft.AspNetCore.Mvc;
-
-    public abstract class BaseController : Controller
+    public class CommonController : BaseController
     {
     }
 }

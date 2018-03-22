@@ -39,10 +39,10 @@ namespace NewsBlog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            string connection = Configuration.GetConnectionString("DefaultConnection");
 
+            // Add framework services.
+            services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(connection));
             services.AddTransient<ApplicationDbInitializer>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -56,7 +56,7 @@ namespace NewsBlog
             {
                 // Password settings
                 options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 4;
+                options.Password.RequiredLength = 6;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;

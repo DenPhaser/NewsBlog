@@ -1,4 +1,4 @@
-﻿{
+{
   "userSecretsId": "aspnet-NewsBlog-2f7eb32f-b8f1-4518-829c-217e10bc3d57",
 
   "dependencies": {
@@ -29,9 +29,9 @@
       "type": "build"
     },
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0",
-    "Microsoft.Extensions.Configuration.Json": "1.0.0",
+    "Microsoft.Extensions.Configuration.Json": "1.1.2",
     "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
-    "Microsoft.Extensions.Logging": "1.0.0",
+    "Microsoft.Extensions.Logging": "1.1.2",
     "Microsoft.Extensions.Logging.Console": "1.0.0",
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
@@ -43,7 +43,10 @@
     "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": {
       "version": "1.0.0-preview2-final",
       "type": "build"
-    }
+    },
+    "MySql.Data": "6.10.6",
+    "MySql.Data.EntityFrameworkCore": "6.10.6",
+    "Devart.Data.MySql.EFCore": "8.10.1086"
   },
 
   "tools": {

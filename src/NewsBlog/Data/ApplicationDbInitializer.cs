@@ -5,40 +5,42 @@ using System.Threading.Tasks;
 
 namespace NewsBlog.Data
 {
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
     using NewsBlog.Models;
 
     public class ApplicationDbInitializer
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public ApplicationDbInitializer(ApplicationDbContext context)
+        public ApplicationDbInitializer(
+            ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             this._context = context;
+            this._userManager = userManager;
+            this._roleManager = roleManager;
         }
 
         public async Task Initialize()
         {
-            if (!this._context.Roles.Any())
+            IdentityRole adminRole;
+            if (await this._roleManager.RoleExistsAsync("Administrator"))
             {
-                var roles =
-                    new List<IdentityRole>()
+                adminRole =
+                    new IdentityRole()
                     {
-                        new IdentityRole()
-                        {
-                            Name = "Admin",
-                            NormalizedName = "Administrator"
-                        },
-                        new IdentityRole()
-                        {
-                            Name = "Customer",
-                            NormalizedName = "Customer"
-                        },
+                        Name = "Administrator",
                     };
-
-                this._context.Roles.AddRange(roles);
-                await this._context.SaveChangesAsync();
+                await this._roleManager.CreateAsync(adminRole);
+            }
+            else
+            {
+                adminRole = await this._roleManager.FindByNameAsync("Admin");
             }
 
             if (!this._context.Users.Any())
@@ -64,6 +66,18 @@ namespace NewsBlog.Data
                     };
 
                 this._context.Users.Add(defaultUser);
+
+                await this._context.SaveChangesAsync();
+
+                this._context.UserRoles.AddRange(
+                    new List<IdentityUserRole<string>>()
+                    {
+                        new IdentityUserRole<string>()
+                        {
+                            UserId = defaultUser.Id,
+                            RoleId = adminRole.Id
+                        }
+                    });
 
                 await this._context.SaveChangesAsync();
             }
