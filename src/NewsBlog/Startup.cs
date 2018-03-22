@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,6 +41,11 @@ namespace NewsBlog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new RequireHttpsAttribute());
+            });
+
             string connection = Configuration.GetConnectionString("DefaultConnection");
 
             // Add framework services.
@@ -88,6 +95,11 @@ namespace NewsBlog
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            // Force redirect to HTTPS
+            var options = new RewriteOptions()
+                .AddRedirectToHttps();
+            app.UseRewriter(options);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -104,6 +116,13 @@ namespace NewsBlog
             app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
+
+            // Facebook authentucation
+            app.UseFacebookAuthentication(new FacebookOptions()
+            {
+                AppId = Configuration["Authentication:Facebook:AppId"],
+                AppSecret = Configuration["Authentication:Facebook:AppSecret"]
+            });
 
             app.UseMvc(routes =>
             {
