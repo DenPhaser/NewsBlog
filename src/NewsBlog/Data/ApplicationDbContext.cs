@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using NewsBlog.Domain;
 using NewsBlog.Models;
 
 namespace NewsBlog.Data
@@ -14,6 +15,8 @@ namespace NewsBlog.Data
             : base(options)
         {
         }
+
+        public DbSet<Post> Posts { get; set; } 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,6 +31,14 @@ namespace NewsBlog.Data
             // Add your customizations after calling base.OnModelCreating(builder);
 
             builder.Entity<ApplicationUser>().HasKey(e => e.Id);
+
+            // Post mapping
+            builder.Entity<Post>().HasKey(e => e.Id);
+            builder.Entity<Post>().Property(e => e.Title).IsRequired();
+            builder.Entity<Post>()
+                .HasOne(e => e.User)
+                .WithMany(e => e.Posts)
+                .HasForeignKey(e => e.UserId);
         }
     }
 }

@@ -1,0 +1,26 @@
+﻿@model PagerViewModel
+
+@using NewsBlog.Domain;
+@using NewsBlog.Data;
+@using NewsBlog.Models.Common;
+
+@{
+    var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    var actionName = this.ViewContext.RouteData.Values["action"].ToString();
+}
+
+@if (Model.PageCount > 1)
+{
+    <ul class="pagination pagination-sm no-margin pull-right">
+        <li><a asp-controller="@controllerName" asp-action="@actionName" asp-route-page="1">«</a></li>
+
+        @for (var page = 1; page <= Model.PageCount; page++)
+        {
+            <li class="@(page == Model.Page ? "active" : string.Empty)">
+                <a asp-controller="@controllerName" asp-action="@actionName" asp-route-page="@page">@page</a>
+            </li>
+        }
+
+        <li><a asp-controller="@controllerName" asp-action="@actionName" asp-route-page="@Model.PageCount">»</a></li>
+    </ul>
+}

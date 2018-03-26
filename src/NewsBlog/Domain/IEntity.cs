@@ -5,12 +5,8 @@ using System.Threading.Tasks;
 
 namespace NewsBlog.Domain
 {
-    public enum UserRoles
+    public interface IEntity<T>
     {
-        Default = 0,
-
-        Customer = 10,
-
-        Administrator = 20,
+        T Id { get; set; }
     }
 }

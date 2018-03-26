@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NewsBlog.Domain;
+using NewsBlog.Services;
 
 namespace NewsBlog.Data
 {
@@ -12,40 +14,45 @@ namespace NewsBlog.Data
 
     public class ApplicationDbInitializer
     {
+        private readonly Random random;
+
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IPostService _postService;
 
         public ApplicationDbInitializer(
             ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IPostService postService)
         {
             this._context = context;
             this._userManager = userManager;
             this._roleManager = roleManager;
+            this._postService = postService;
+
+            this.random = new Random();
         }
 
         public async Task Initialize()
         {
-            IdentityRole adminRole;
+            // Initialize admin role
             if (!await this._roleManager.RoleExistsAsync("Administrator"))
             {
-                adminRole =
+                var adminRole =
                     new IdentityRole()
                     {
                         Name = "Administrator",
                     };
                 await this._roleManager.CreateAsync(adminRole);
             }
-            else
-            {
-                adminRole = await this._roleManager.FindByNameAsync("Administrator");
-            }
 
-            if (!this._context.Users.Any())
+            // Initialize default user
+            ApplicationUser defaultUser;
+            if ((defaultUser = this._context.Users.SingleOrDefault(u => u.Email == "default@test.test")) == null)
             {
-                var defaultUser =
+                defaultUser =
                     new ApplicationUser()
                     {
                         Email = "default@test.test",
@@ -68,19 +75,63 @@ namespace NewsBlog.Data
                 this._context.Users.Add(defaultUser);
 
                 await this._context.SaveChangesAsync();
+            }
 
-                this._context.UserRoles.AddRange(
-                    new List<IdentityUserRole<string>>()
-                    {
-                        new IdentityUserRole<string>()
-                        {
-                            UserId = defaultUser.Id,
-                            RoleId = adminRole.Id
-                        }
-                    });
+            // Assign administrator's role
+            if (!await this._userManager.IsInRoleAsync(defaultUser, "Administrator"))
+            {
+                await this._userManager.AddToRoleAsync(defaultUser, "Administrator");
+            }
+
+            // Generate posts
+            if (!await Task.Run(() => this._postService.GetPosts(userId: defaultUser.Id).Any()))
+            {
+                var posts = this.GetPosts(30);
+
+                defaultUser.Posts = posts;
 
                 await this._context.SaveChangesAsync();
             }
+        }
+
+        private List<Post> GetPosts(int count)
+        {
+            var posts = new List<Post>();
+
+            Enumerable.Range(0, count).ToList().ForEach(i =>
+            {
+                posts.Add(NewPost(GetRandomString(15, 60), GetRandomString()));
+            });
+
+            return posts;
+        }
+
+        private Post NewPost(string title, string content)
+        {
+            var createdAt = DateTime.Now.AddDays(random.Next(1000) - 500);
+            var modifiedAt = createdAt.AddDays(random.Next(200));
+
+            return new Post()
+            {
+                Title = title,
+                Text = content,
+                ImagePath = string.Empty,
+
+                CreatedAt = createdAt,
+                ModifiedAt = modifiedAt,
+            };
+        }
+
+        private string GetRandomString(int minLength = 100, int maxLength = 500)
+        {
+            const string chars = "            abcdefghijklmnopqrstuvwxyz0123456789";
+            var length = random.Next(minLength, maxLength);
+
+            return new string(
+                Enumerable
+                    .Repeat(chars, length)
+                    .Select(s => s[random.Next(s.Length)]).ToArray())
+                    .Trim();
         }
     }
 }

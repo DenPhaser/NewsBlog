@@ -11,7 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MySql.Data.EntityFrameworkCore.Extensions;
 using NewsBlog.Data;
+using NewsBlog.Domain;
 using NewsBlog.Models;
 using NewsBlog.Services;
 
@@ -83,6 +85,9 @@ namespace NewsBlog
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            
+            services.AddTransient<IRepository<Post>, EfRepository<Post>>();
+            services.AddTransient<IPostService, PostService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -129,18 +134,6 @@ namespace NewsBlog
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
-
-                routes.MapRoute(
-                    name: "News.List",
-                    template: "{controller=News}/{action=Index}");
-
-                routes.MapRoute(
-                    name: "News.View",
-                    template: "{controller=News}/{id}");
-
-                routes.MapRoute(
-                    name: "News.Create",
-                    template: "{controller=News}/{action=Crate}/{id}");
             });
 
             applicationDbInitializer.Initialize().Wait();

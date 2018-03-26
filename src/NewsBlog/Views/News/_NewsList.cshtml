@@ -1,9 +1,0 @@
-﻿@model List<NewsBlog.Models.NewsViewModels.NewsViewModel>
-
-@foreach (var newsItem in Model)
-{
-    <div>
-        <h3>@newsItem.Title</h3>
-        <p>@Html.Raw(newsItem.Content)</p>
-    </div>
-}

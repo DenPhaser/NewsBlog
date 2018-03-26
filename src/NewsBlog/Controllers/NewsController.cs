@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NewsBlog.Services;
 
 namespace NewsBlog.Controllers
 {
@@ -12,11 +13,19 @@ namespace NewsBlog.Controllers
 
     public class NewsController : BaseController
     {
+        #region Fields
+
+        private readonly IPostService _postService;
+
+        #endregion
+
         #region Ctor
 
-        public NewsController()
+        public NewsController(
+            IPostService postService)
             : base()
         {
+            this._postService = postService;
         }
 
         #endregion
@@ -25,9 +34,11 @@ namespace NewsBlog.Controllers
 
         // GET: /News/Index
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
-            throw new NotImplementedException();
+            ViewBag.Page = page;
+
+            return View();
         }
 
         // GET: /News/View

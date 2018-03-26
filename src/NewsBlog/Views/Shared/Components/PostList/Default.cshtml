@@ -1,0 +1,27 @@
+﻿@model PagedList<Post>
+
+@using NewsBlog.Domain;
+@using NewsBlog.Data;
+
+@foreach (var post in Model)
+{
+    <div class="box box-solid">
+        <div class="box-header with-border">
+            <h3 class="box-title">@post.Title</h3>
+            <div class="user-block">
+                <div class="row">
+                    <div class="col-sm-5 col-sm-offset-7">
+                        <span class="description">@post.CreatedAt</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<div class="box-body">
+            <p>@Html.Raw(post.Text)</p>
+        </div>*@
+    </div>
+}
+
+<div class="box-footer clearfix">
+    @await Component.InvokeAsync("Pager", new { page = Model.PageIndex, count = Model.TotalPages })
+</div>
