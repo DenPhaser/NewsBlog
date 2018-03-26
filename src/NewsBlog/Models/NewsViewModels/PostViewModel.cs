@@ -6,11 +6,21 @@ using System.Threading.Tasks;
 
 namespace NewsBlog.Models.NewsViewModels
 {
-    public class NewsViewModel
+    public class PostViewModel
     {
+        public long Id { get; set; }
+
         [Required]
         [Display(Name = "Title")]
         public string Title { get; set; }
+
+        [Required]
+        [Display(Name = "Image Path")]
+        public string ImagePath { get; set; }
+
+        [Required]
+        [Display(Name = "Image")]
+        public byte[] Image { get; set; }
 
         [Required]
         [Display(Name = "Content")]

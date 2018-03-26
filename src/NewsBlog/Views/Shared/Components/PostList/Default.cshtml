@@ -2,26 +2,44 @@
 
 @using NewsBlog.Domain;
 @using NewsBlog.Data;
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 
-@foreach (var post in Model)
-{
-    <div class="box box-solid">
-        <div class="box-header with-border">
-            <h3 class="box-title">@post.Title</h3>
-            <div class="user-block">
-                <div class="row">
-                    <div class="col-sm-5 col-sm-offset-7">
-                        <span class="description">@post.CreatedAt</span>
+<div class="box">
+    <div class="box-header with-border">
+        <div class="box-tools pull-right">
+            @if (await AuthorizationService.AuthorizeAsync(User, "Administrator"))
+            {
+                <a asp-controller="News" asp-action="Create" class="btn btn-sm btn-info btn-flat pull-left">New Post</a>
+            }
+        </div>
+    </div>
+
+    @foreach (var post in Model)
+    {
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title">@post.Title</h3>
+                <div class="user-block">
+                    <div class="row">
+                        <div class="col-sm-5 col-sm-offset-7">
+                            <span class="description">@post.CreatedAt</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        @*<div class="box-body">
-            <p>@Html.Raw(post.Text)</p>
-        </div>*@
-    </div>
-}
 
+                <a asp-controller="News" asp-action="View" asp-route-id="@post.Id">View</a>
+                @if (await AuthorizationService.AuthorizeAsync(User, "Administrator"))
+                {
+                    <a asp-controller="News" asp-action="Edit" asp-route-id="@post.Id">Edit</a>
+                }
+            </div>
+            @*<div class="box-body">
+                    <p>@Html.Raw(post.Text)</p>
+                </div>*@
+        </div>
+    }
+</div>
 <div class="box-footer clearfix">
     @await Component.InvokeAsync("Pager", new { page = Model.PageIndex, count = Model.TotalPages })
 </div>

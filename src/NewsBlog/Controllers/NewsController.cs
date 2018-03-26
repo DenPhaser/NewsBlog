@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NewsBlog.Extensions;
 using NewsBlog.Services;
 
 namespace NewsBlog.Controllers
@@ -45,7 +46,9 @@ namespace NewsBlog.Controllers
         [HttpGet]
         public ActionResult View(long id)
         {
-            throw new NotImplementedException();
+            var post = this._postService.GetPostById(id);
+
+            return View(post.ToModel());
         }
 
         // GET: /News/Add
@@ -53,16 +56,21 @@ namespace NewsBlog.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult Add()
         {
-            throw new NotImplementedException();
+            var postModel = new PostViewModel();
+
+            return View(postModel);
         }
 
         // POST: /News/Add
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public ActionResult Add(NewsViewModel model)
+        public ActionResult Add(PostViewModel model)
         {
-            throw new NotImplementedException();
+            var post = model.ToEntity();
+            this._postService.InsertPost(post);
+
+            return RedirectToAction("Edit", new { id = post.Id });
         }
 
         // GET: /News/Edit
@@ -70,16 +78,22 @@ namespace NewsBlog.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult Edit(long id)
         {
-            throw new NotImplementedException();
+            var postModel = this._postService.GetPostById(id).ToModel();
+
+            return View(postModel);
         }
 
         // POST: /News/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public ActionResult Edit(NewsViewModel model)
+        public ActionResult Edit(PostViewModel model)
         {
-            throw new NotImplementedException();
+            var post = model.ToEntity();
+
+            this._postService.UpdatePost(post);
+
+            return RedirectToAction("Edit", new { id = post.Id });
         }
 
         #endregion

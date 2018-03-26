@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -80,6 +81,12 @@ namespace NewsBlog
 
                 // User settings
                 options.User.RequireUniqueEmail = true;
+            });
+
+            // Add administrator's policy
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Administrator", policy => policy.RequireRole("Administrator"));
             });
 
             // Add application services.
