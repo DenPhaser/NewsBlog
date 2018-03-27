@@ -10,15 +10,16 @@
         where TEntity : BaseEntity
     {
         private readonly ApplicationDbContext _context;
-        private DbSet<TEntity> _dbSet = null;
+        private readonly DbSet<TEntity> _dbSet;
 
         public EfRepository(ApplicationDbContext context)
         {
             this._context = context;
+            this._dbSet = this._context.Set<TEntity>();
         }
 
         public IQueryable<TEntity> Table =>
-            this._dbSet ?? (this._dbSet = this._context.Set<TEntity>());
+            this._dbSet.AsNoTracking();
 
         public TEntity GetById(long id)
         {

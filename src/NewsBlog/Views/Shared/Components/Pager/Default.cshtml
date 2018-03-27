@@ -16,9 +16,20 @@
 
         @for (var page = 1; page <= Model.PageCount; page++)
         {
-            <li class="@(page == Model.Page ? "active" : string.Empty)">
-                <a asp-controller="@controllerName" asp-action="@actionName" asp-route-page="@page">@page</a>
-            </li>
+            var diff = Math.Abs(Model.Page - page);
+
+            if (diff <= 2)
+            {
+                <li class="@(page == Model.Page ? "active" : string.Empty)">
+                    <a asp-controller="@controllerName" asp-action="@actionName" asp-route-page="@page">@page</a>
+                </li>
+            }
+            else if (diff == 3)
+            {
+                <li>
+                    <span>...</span>
+                </li>
+            }
         }
 
         <li><a asp-controller="@controllerName" asp-action="@actionName" asp-route-page="@Model.PageCount">»</a></li>

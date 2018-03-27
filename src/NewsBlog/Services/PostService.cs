@@ -48,12 +48,22 @@ namespace NewsBlog.Services
 
         public void InsertPost(Post post)
         {
+            post.CreatedAt = DateTime.Now;
+            post.ModifiedAt = post.CreatedAt;
+
             this._postRepository.Add(post);
         }
 
         public void UpdatePost(Post post)
         {
+            post.ModifiedAt = DateTime.Now;
+
             this._postRepository.Update(post);
+        }
+
+        public void DeletePost(Post post)
+        {
+            this._postRepository.Delete(post);
         }
     }
 }

@@ -7,26 +7,33 @@ using NewsBlog.Services;
 
 namespace NewsBlog.Controllers
 {
+    using AutoMapper;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    using NewsBlog.Domain;
     using NewsBlog.Models.NewsViewModels;
 
     public class NewsController : BaseController
     {
         #region Fields
 
-        private readonly IPostService _postService;
+        private readonly IPostService postService;
+
+        private readonly IMapper mapper;
 
         #endregion
 
         #region Ctor
 
         public NewsController(
-            IPostService postService)
+            IPostService postService,
+            IMapper mapper)
             : base()
         {
-            this._postService = postService;
+            this.postService = postService;
+            this.mapper = mapper;
         }
 
         #endregion
@@ -42,33 +49,36 @@ namespace NewsBlog.Controllers
             return View();
         }
 
-        // GET: /News/View
+        // GET: /News/Create
         [HttpGet]
         public ActionResult View(long id)
         {
-            var post = this._postService.GetPostById(id);
+            var post = this.postService.GetPostById(id);
+            var model = this.mapper.Map<PostViewModel>(post);
 
-            return View(post.ToModel());
+            return View(model);
         }
 
-        // GET: /News/Add
+        // GET: /News/Create
         [HttpGet]
         [Authorize(Roles = "Administrator")]
-        public ActionResult Add()
+        public ActionResult Create()
         {
-            var postModel = new PostViewModel();
+            var model = new PostViewModel();
 
-            return View(postModel);
+            return View(model);
         }
 
         // POST: /News/Add
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public ActionResult Add(PostViewModel model)
+        public ActionResult Create(PostViewModel model)
         {
-            var post = model.ToEntity();
-            this._postService.InsertPost(post);
+            var post = this.mapper.Map<Post>(model);
+            post.User = this.GetCurrentUser();
+
+            this.postService.InsertPost(post);
 
             return RedirectToAction("Edit", new { id = post.Id });
         }
@@ -78,9 +88,10 @@ namespace NewsBlog.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult Edit(long id)
         {
-            var postModel = this._postService.GetPostById(id).ToModel();
+            var post = this.postService.GetPostById(id);
+            var model = this.mapper.Map<PostViewModel>(post);
 
-            return View(postModel);
+            return View(model);
         }
 
         // POST: /News/Edit
@@ -89,11 +100,24 @@ namespace NewsBlog.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult Edit(PostViewModel model)
         {
-            var post = model.ToEntity();
-
-            this._postService.UpdatePost(post);
+            var post = this.postService.GetPostById(model.Id);
+            //post = this.mapper.Map(model, post);
+            post.Title = model.Title;
+            post.Text = model.Content;
+            this.postService.UpdatePost(post);
 
             return RedirectToAction("Edit", new { id = post.Id });
+        }
+
+        // GET: /News/Delete
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Delete(long id)
+        {
+            var post = this.postService.GetPostById(id);
+            this.postService.DeletePost(post);
+
+            return RedirectToAction("Index");
         }
 
         #endregion

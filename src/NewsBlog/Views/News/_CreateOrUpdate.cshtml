@@ -2,6 +2,8 @@
 
 @using NewsBlog.Models.NewsViewModels
 
+@Html.HiddenFor(model => model.Id)
+
 <div class="box-body">
     <div class="form-group">
         <label asp-for="Title"></label>
@@ -16,7 +18,5 @@
     <div class="form-group">
         <label asp-for="Image"></label>
         <input type="file" asp-for="Image">
-        <span asp-validation-for="Image" class="text-danger"></span>
-       @* <p class="help-block">Example block-level help text here.</p>*@
     </div>
 </div>

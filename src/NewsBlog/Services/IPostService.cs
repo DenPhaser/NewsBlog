@@ -18,5 +18,7 @@ namespace NewsBlog.Services
         void InsertPost(Post post);
 
         void UpdatePost(Post post);
+
+        void DeletePost(Post post);
     }
 }

@@ -20,6 +20,8 @@ using NewsBlog.Services;
 
 namespace NewsBlog
 {
+    using AutoMapper;
+
     public class Startup
     {
         public Startup(IHostingEnvironment env)
@@ -58,6 +60,9 @@ namespace NewsBlog
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            // Add automapper
+            services.AddAutoMapper();
 
             services.AddMvc();
 
