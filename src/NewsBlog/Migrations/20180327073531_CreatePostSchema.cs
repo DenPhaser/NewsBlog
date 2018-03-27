@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace NewsBlog.Data.Migrations
+namespace NewsBlog.Migrations
 {
-    public partial class CreatePosts : Migration
+    public partial class CreatePostSchema : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "IX_AspNetUserRoles_UserId",
-                table: "AspNetUserRoles");
-
             migrationBuilder.CreateTable(
                 name: "Posts",
                 columns: table => new
@@ -46,11 +42,6 @@ namespace NewsBlog.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Posts");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_UserId",
-                table: "AspNetUserRoles",
-                column: "UserId");
         }
     }
 }

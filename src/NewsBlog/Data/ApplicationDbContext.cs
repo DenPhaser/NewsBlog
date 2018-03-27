@@ -11,6 +11,12 @@ namespace NewsBlog.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        #region Consts
+
+        private const int StringKeyMaxLength = 150;
+
+        #endregion
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -31,6 +37,19 @@ namespace NewsBlog.Data
             // Add your customizations after calling base.OnModelCreating(builder);
 
             builder.Entity<ApplicationUser>().HasKey(e => e.Id);
+            builder.Entity<ApplicationUser>().Property(e => e.Id).HasMaxLength(StringKeyMaxLength);
+
+            builder.Entity<IdentityRole>().Property(e => e.Id).HasMaxLength(StringKeyMaxLength);
+
+            builder.Entity<IdentityUserToken<string>>().Property(e => e.UserId).HasMaxLength(StringKeyMaxLength);
+            builder.Entity<IdentityUserToken<string>>().Property(e => e.LoginProvider).HasMaxLength(StringKeyMaxLength);
+            builder.Entity<IdentityUserToken<string>>().Property(e => e.Name).HasMaxLength(StringKeyMaxLength);
+
+            builder.Entity<IdentityUserLogin<string>>().Property(e => e.LoginProvider).HasMaxLength(StringKeyMaxLength);
+            builder.Entity<IdentityUserLogin<string>>().Property(e => e.ProviderKey).HasMaxLength(StringKeyMaxLength);
+
+            builder.Entity<IdentityUserRole<string>>().Property(e => e.UserId).HasMaxLength(StringKeyMaxLength);
+            builder.Entity<IdentityUserRole<string>>().Property(e => e.RoleId).HasMaxLength(StringKeyMaxLength);
 
             // Post mapping
             builder.Entity<Post>().HasKey(e => e.Id);

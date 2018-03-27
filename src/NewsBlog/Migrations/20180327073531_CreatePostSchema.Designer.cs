@@ -5,12 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using NewsBlog.Data;
 
-namespace NewsBlog.Data.Migrations
+namespace NewsBlog.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180327073531_CreatePostSchema")]
+    partial class CreatePostSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.4");
@@ -18,7 +19,8 @@ namespace NewsBlog.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("MaxLength", 150);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -77,9 +79,11 @@ namespace NewsBlog.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasAnnotation("MaxLength", 150);
 
-                    b.Property<string>("ProviderKey");
+                    b.Property<string>("ProviderKey")
+                        .HasAnnotation("MaxLength", 150);
 
                     b.Property<string>("ProviderDisplayName");
 
@@ -95,9 +99,11 @@ namespace NewsBlog.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasAnnotation("MaxLength", 150);
 
-                    b.Property<string>("RoleId");
+                    b.Property<string>("RoleId")
+                        .HasAnnotation("MaxLength", 150);
 
                     b.HasKey("UserId", "RoleId");
 
@@ -108,11 +114,14 @@ namespace NewsBlog.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserToken<string>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasAnnotation("MaxLength", 150);
 
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasAnnotation("MaxLength", 150);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasAnnotation("MaxLength", 150);
 
                     b.Property<string>("Value");
 
@@ -149,7 +158,8 @@ namespace NewsBlog.Data.Migrations
             modelBuilder.Entity("NewsBlog.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("MaxLength", 150);
 
                     b.Property<int>("AccessFailedCount");
 
