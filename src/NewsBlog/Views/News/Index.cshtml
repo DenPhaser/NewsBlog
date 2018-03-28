@@ -1,5 +1,10 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "News";
+}
+
+@section Breadcrumb
+{
+    @Html.Partial("_Breadcrumb", "News")
 }
 
 @await Component.InvokeAsync("PostList", new { page = ViewBag.Page })

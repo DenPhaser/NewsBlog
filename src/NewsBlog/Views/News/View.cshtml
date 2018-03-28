@@ -3,7 +3,12 @@
 @using NewsBlog.Models.NewsViewModels
 
 @{
-    ViewData["Title"] = "View Post";
+    ViewData["Title"] = Model.Title;
+}
+
+@section Breadcrumb
+{
+    @Html.Partial("_Breadcrumb", Model.Title)
 }
 
 <div class="box">

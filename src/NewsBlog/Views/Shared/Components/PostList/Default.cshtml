@@ -37,16 +37,18 @@
                             <a asp-controller="News" asp-action="Edit" asp-route-id="@post.Id" class="btn btn-sm btn-info btn-flat">
                                 <i class="fa fa-fw fa-edit"></i>
                             </a>
-                                    <a asp-controller="News" asp-action="Delete" asp-route-id="@post.Id" class="btn btn-sm btn-info btn-flat">
-                                        <i class="fa fa-fw fa-remove"></i>
-                                    </a>
+                            <a asp-controller="News" asp-action="Delete" asp-route-id="@post.Id" asp-route-returnUri="@Context.Request.Path" class="btn btn-sm btn-info btn-flat">
+                                <i class="fa fa-fw fa-remove"></i>
+                            </a>
                         }
                     </div>
                 </div>
                 <div class="box-body">
                     <div class="row">
                         <div class="col-md-3">
-                            <img src="@post.ImagePath" alt="" class="media-object" style="width: 100%;">
+                            <a asp-controller="News" asp-action="View" asp-route-id="@post.Id">
+                                <img src="@post.ImagePath" alt="" class="media-object" style="width: 100%;">
+                            </a>
                         </div>
                         <div class="col-md-9">
                             <p>

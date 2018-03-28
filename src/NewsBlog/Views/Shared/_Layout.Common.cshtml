@@ -1,0 +1,40 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["BodyClass"] = "skin-blue layout-top-nav";
+}
+
+<div class="wrapper">
+    @await Html.PartialAsync("_Header")
+
+    <div class="content-wrapper" style="min-height: 888px;">
+        <div class="container">
+            <div class="row">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>
+                        @ViewData["Title"]
+                        <small>Example 2.0</small>
+                    </h1>
+                    @if (IsSectionDefined("Breadcrumb"))
+                    {
+                        @RenderSection("Breadcrumb")
+                    }
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+                    @RenderBody()
+                </section>
+                <!-- /.content -->
+            </div>
+        </div>
+        <!-- /.container -->
+    </div>
+</div>
+
+@if (IsSectionDefined("Scripts"))
+{
+    @section Scripts {
+        @RenderSection("Scripts")
+    }
+}

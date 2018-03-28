@@ -3,7 +3,12 @@
 @using NewsBlog.Models.NewsViewModels
 
 @{
-    ViewData["Title"] = "Create Post";
+    ViewData["Title"] = "Edit Post";
+}
+
+@section Breadcrumb
+{
+    @Html.Partial("_Breadcrumb", Model.Title)
 }
 
 @using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -11,9 +16,6 @@
     @Html.AntiForgeryToken()
 
     <div class="box box-primary">
-        <div class="box-header with-border">
-            <h3 class="box-title">Edit Post</h3>
-        </div>
         @Html.Partial("_CreateOrUpdate", Model)
         <div class="box-footer">
             <button type="submit" class="btn btn-primary">Submit</button>

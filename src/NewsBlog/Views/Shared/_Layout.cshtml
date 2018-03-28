@@ -10,6 +10,10 @@
         <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet">
         <link rel="stylesheet" href="~/lib/admin-lte/dist/css/AdminLTE.css" />
         <link rel="stylesheet" href="~/lib/admin-lte/dist/css/skins/_all-skins.css" />
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="~/lib/Ionicons/css/ionicons.min.css">
+        <!-- iCheck -->
+        <link rel="stylesheet" href="~/lib/admin-lte/plugins/iCheck/square/blue.css">
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment names="Staging,Production">
@@ -19,51 +23,46 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
-<body class="sidebar-mini skin-blue">
-
-    @await Html.PartialAsync("_Header")
-
-    @await Html.PartialAsync("_Sidebar")
-
-    <div class="content-wrapper" style="min-height: 960px;">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>
-                Dashboard
-                <small>Version 2.0</small>
-            </h1>
-            @Html.Partial("_Breadcrumb")
-        </section>
-
-        <!-- Main content -->
-        <section class="content">
-            <div class="row">
-                <div class="col-md-12">
-                    @RenderBody()
-                </div>
-            </div>
-        </section>
-        <!-- /.content -->
-    </div>
+<body class="@ViewData["BodyClass"]">
+    @RenderBody()
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/lib/admin-lte/dist/js/adminlte.js"></script>
+        <!-- iCheck -->
+        <script src="~/lib/admin-lte/plugins/iCheck/icheck.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery">
+
+
         </script>
         <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+
+
+
         </script>
+        <!-- iCheck -->
+        <script src="~/lib/admin-lte/plugins/iCheck/icheck.min.js"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
     @RenderSection("scripts", required: false)
+
+    <script>
+        $(function () {
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' /* optional */
+            });
+        });
+    </script>
 </body>
 </html>
