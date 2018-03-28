@@ -6,7 +6,7 @@
     ViewData["Title"] = "Create Post";
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 

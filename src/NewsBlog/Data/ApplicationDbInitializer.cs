@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using NewsBlog.Domain;
 using NewsBlog.Services;
 
@@ -15,6 +17,7 @@ namespace NewsBlog.Data
     public class ApplicationDbInitializer
     {
         private readonly Random random;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -22,11 +25,13 @@ namespace NewsBlog.Data
         private readonly IPostService _postService;
 
         public ApplicationDbInitializer(
+            IHostingEnvironment hostingEnvironment,
             ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IPostService postService)
         {
+            this._hostingEnvironment = hostingEnvironment;
             this._context = context;
             this._userManager = userManager;
             this._roleManager = roleManager;
@@ -98,15 +103,24 @@ namespace NewsBlog.Data
         {
             var posts = new List<Post>();
 
+            var imagePaths = Directory.GetFiles(Path.Combine(_hostingEnvironment.WebRootPath, "uploads"), "*.jpg");
+
             Enumerable.Range(0, count).ToList().ForEach(i =>
             {
-                posts.Add(NewPost(GetRandomString(15, 60), GetRandomString()));
+                string imageRelPath = null;
+                var imageAbsPath = imagePaths.OrderBy(ip => Guid.NewGuid()).FirstOrDefault();
+                if (!string.IsNullOrEmpty(imageAbsPath))
+                {
+                    imageRelPath = $"/uploads/{Path.GetFileName(imageAbsPath)}";
+                }
+
+                posts.Add(NewPost(GetRandomString(15, 60), GetRandomString(), imageRelPath));
             });
 
             return posts;
         }
 
-        private Post NewPost(string title, string content)
+        private Post NewPost(string title, string content, string imagePath = null)
         {
             var createdAt = DateTime.Now.AddDays(random.Next(1000) - 500);
             var modifiedAt = createdAt.AddDays(random.Next(200));
@@ -115,7 +129,7 @@ namespace NewsBlog.Data
             {
                 Title = title,
                 Text = content,
-                ImagePath = string.Empty,
+                ImagePath = imagePath,
 
                 CreatedAt = createdAt,
                 ModifiedAt = modifiedAt,

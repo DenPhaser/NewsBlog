@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using NewsBlog.Extensions;
+using NewsBlog.Models;
 using NewsBlog.Services;
 
 namespace NewsBlog.Controllers
@@ -19,6 +23,7 @@ namespace NewsBlog.Controllers
     {
         #region Fields
 
+        private readonly IHostingEnvironment hostingEnvironment;
         private readonly IPostService postService;
 
         private readonly IMapper mapper;
@@ -28,10 +33,12 @@ namespace NewsBlog.Controllers
         #region Ctor
 
         public NewsController(
+            IHostingEnvironment hostingEnvironment,
             IPostService postService,
             IMapper mapper)
             : base()
         {
+            this.hostingEnvironment = hostingEnvironment;
             this.postService = postService;
             this.mapper = mapper;
         }
@@ -69,14 +76,21 @@ namespace NewsBlog.Controllers
             return View(model);
         }
 
-        // POST: /News/Add
+        // POST: /News/Create
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public ActionResult Create(PostViewModel model)
+        public async Task<IActionResult> Create(PostViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             var post = this.mapper.Map<Post>(model);
             post.User = this.GetCurrentUser();
+            post.ImagePath = await UploadImageAsync(model.Image);
 
             this.postService.InsertPost(post);
 
@@ -98,10 +112,11 @@ namespace NewsBlog.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public ActionResult Edit(PostViewModel model)
+        public async Task<IActionResult> Edit(PostViewModel model)
         {
             var post = this.postService.GetPostById(model.Id);
             post = this.mapper.Map(model, post);
+            post.ImagePath = await UploadImageAsync(model.Image) ?? post.ImagePath;
             this.postService.UpdatePost(post);
 
             return RedirectToAction("Edit", new { id = post.Id });
@@ -116,6 +131,29 @@ namespace NewsBlog.Controllers
             this.postService.DeletePost(post);
 
             return RedirectToAction("Index");
+        }
+
+        #endregion
+
+        #region Utilites
+
+        private async Task<string> UploadImageAsync(IFormFile file)
+        {
+            if (file == null)
+            {
+                return null;
+            }
+
+            var fileName = $"{Guid.NewGuid()}_{file.FileName}";
+            var relativePath = Path.Combine("uploads", fileName);
+            var filePath = Path.Combine(hostingEnvironment.WebRootPath, relativePath);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            return $"/ {relativePath}";
         }
 
         #endregion

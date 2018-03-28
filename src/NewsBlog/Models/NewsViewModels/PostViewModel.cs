@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace NewsBlog.Models.NewsViewModels
 {
@@ -15,15 +16,12 @@ namespace NewsBlog.Models.NewsViewModels
         public string Title { get; set; }
 
         [Required]
-        [Display(Name = "Image Path")]
-        public string ImagePath { get; set; }
-
-        [Required]
-        [Display(Name = "Image")]
-        public byte[] Image { get; set; }
-
-        [Required]
         [Display(Name = "Content")]
         public string Content { get; set; }
+
+        [Display(Name = "Image")]
+        public IFormFile Image { get; set; }
+
+        public string ImagePath { get; set; }
     }
 }

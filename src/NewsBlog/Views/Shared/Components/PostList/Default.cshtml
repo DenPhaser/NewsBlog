@@ -44,9 +44,16 @@
                     </div>
                 </div>
                 <div class="box-body">
-                    <p>
-                        @Html.Raw(post.Text)
-                    </p>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <img src="@post.ImagePath" alt="" class="media-object" style="width: 100%;">
+                        </div>
+                        <div class="col-md-9">
+                            <p>
+                                @Html.Raw(post.Text)
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         }
