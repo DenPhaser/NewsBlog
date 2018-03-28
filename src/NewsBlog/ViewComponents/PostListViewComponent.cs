@@ -18,7 +18,7 @@
         {
             var items = await Task.Run(() => this._postService.GetPosts(
                 page: page,
-                pageSize: 101));
+                pageSize: 5));
             return View(items);
         }
     }

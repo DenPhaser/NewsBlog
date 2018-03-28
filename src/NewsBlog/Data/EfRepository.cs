@@ -40,7 +40,7 @@
 
         public void Update(TEntity entity)
         {
-            this._dbSet.Attach(entity);
+            this._dbSet.Update(entity);
             this._context.SaveChanges();
         }
     }

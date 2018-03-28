@@ -101,16 +101,14 @@ namespace NewsBlog.Controllers
         public ActionResult Edit(PostViewModel model)
         {
             var post = this.postService.GetPostById(model.Id);
-            //post = this.mapper.Map(model, post);
-            post.Title = model.Title;
-            post.Text = model.Content;
+            post = this.mapper.Map(model, post);
             this.postService.UpdatePost(post);
 
             return RedirectToAction("Edit", new { id = post.Id });
         }
 
         // GET: /News/Delete
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         [Authorize(Roles = "Administrator")]
         public ActionResult Delete(long id)
         {
