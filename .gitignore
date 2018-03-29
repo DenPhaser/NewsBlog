@@ -258,4 +258,4 @@ paket-files/
 webpack.assets.json
 webpack.const.js
 
-uploads/
+src/NewsBlog/wwwroot/uploads/*.jpg

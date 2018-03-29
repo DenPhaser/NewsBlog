@@ -47,7 +47,7 @@
                     <div class="row">
                         <div class="col-md-3">
                             <a asp-controller="News" asp-action="View" asp-route-id="@post.Id">
-                                <img src="@post.ImagePath" alt="" class="media-object" style="width: 100%;">
+                                <img src="@post.ImagePath" alt="" class="img-responsive">
                             </a>
                         </div>
                         <div class="col-md-9">
@@ -59,34 +59,6 @@
                 </div>
             </div>
         }
-
-        @*<table class="table">
-                <tbody>
-                    @foreach (var post in Model)
-                    {
-                        <tr>
-                            <td>@post.ImagePath</td>
-                            <td>
-                                <a asp-controller="News" asp-action="View" asp-route-id="@post.Id">@post.Title</a>
-                                <p>
-                                    @Html.Raw(post.Text)
-                                </p>
-                            </td>
-                            <td>
-                                @if (isAdmin)
-                                {
-                                    <a asp-controller="News" asp-action="Edit" asp-route-id="@post.Id" class="btn btn-sm btn-info btn-flat">
-                                        <i class="fa fa-fw fa-edit"></i>
-                                    </a>
-                                    <a asp-controller="News" asp-action="Delete" asp-route-id="@post.Id" class="btn btn-sm btn-info btn-flat">
-                                        <i class="fa fa-fw fa-remove"></i>
-                                    </a>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>*@
     </div>
 
     <div class="box-footer">

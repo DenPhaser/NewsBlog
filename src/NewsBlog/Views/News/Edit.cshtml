@@ -11,8 +11,7 @@
     @Html.Partial("_Breadcrumb", Model.Title)
 }
 
-@using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
+<form asp-controller="News" asp-action="Edit" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
 
     <div class="box box-primary">
@@ -21,4 +20,4 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </div>
-}
+</form>
