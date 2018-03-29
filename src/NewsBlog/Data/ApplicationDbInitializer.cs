@@ -103,7 +103,9 @@ namespace NewsBlog.Data
         {
             var posts = new List<Post>();
 
-            var imagePaths = Directory.GetFiles(Path.Combine(_hostingEnvironment.WebRootPath, "uploads"), "*.jpg");
+            var imagePaths = Directory.GetFiles(
+                Directory.CreateDirectory(Path.Combine(_hostingEnvironment.WebRootPath, "uploads")).FullName,
+                "*.jpg");
 
             Enumerable.Range(0, count).ToList().ForEach(i =>
             {
